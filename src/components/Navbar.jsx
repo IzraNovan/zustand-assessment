@@ -2,10 +2,6 @@ import { useProfile } from '@/stores/useProfile';
 import { Input } from './ui/input';
 
 function Navbar() {
-  // Bisa, tapi tidak rekomen
-  // const { username, setUsername } = useProfile();
-
-  // ini rekomen
   const username = useProfile((state) => state.username);
   const setUsername = useProfile((state) => state.setUsername);
 

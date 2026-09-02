@@ -1,27 +1,42 @@
-import { useContext } from 'react';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
-import { ReviewContext } from '@/context/ReviewContext';
 import { Button } from './ui/button';
 import { Label } from './ui/label';
-import { useReview } from '@/stores/useReview';
+import {
+  setIsError,
+  setIsSuccess,
+  setName,
+  setReview,
+  updateReviewData,
+  useReview,
+} from '@/stores/useReview';
+import { useShallow } from 'zustand/shallow';
 
 function ReviewForm() {
-  const { state, dispatch } = useContext(ReviewContext);
-  const setReviewData = useReview((state) => state.setReviewData);
+  const { name, review, isSuccess, isError } = useReview(
+    useShallow((state) => ({
+      name: state.name,
+      review: state.review,
+      isSuccess: state.isSuccess,
+      isError: state.isError,
+    })),
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!state?.review || state.review.length <= 5) {
-      dispatch({ type: 'ERROR' });
+    if (!review || review.length <= 5) {
+      setIsError(true);
       return;
     }
 
-    dispatch({ type: 'SUCCESS' });
-    setReviewData({
-      name: state.name,
-      review: state.review,
+    setIsSuccess(true);
+    setIsError(false);
+    setName('');
+    setReview('');
+    updateReviewData({
+      name: name,
+      review: review,
     });
   };
 
@@ -33,7 +48,7 @@ function ReviewForm() {
         <h1 className='font-bold text-lg'>Formulir Ulasan Produk</h1>
       </div>
 
-      {state.isSuccess && (
+      {isSuccess && (
         <p className='text-green-500 text-sm mt-2 font-medium'>
           Review Berhasil Dikirim!
         </p>
@@ -44,30 +59,18 @@ function ReviewForm() {
           <Label>Nama Produk</Label>
           <Input
             type='text'
-            value={state.name}
-            onChange={(e) =>
-              dispatch({
-                type: 'SET_FIELD',
-                field: 'name',
-                value: e.target.value,
-              })
-            }
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
 
         <div>
           <Label>Komentar</Label>
           <Textarea
-            value={state.review}
-            onChange={(e) =>
-              dispatch({
-                type: 'SET_FIELD',
-                field: 'review',
-                value: e.target.value,
-              })
-            }
+            value={review}
+            onChange={(e) => setReview(e.target.value)}
           />
-          {state.isError && (
+          {isError && (
             <p className='text-red-500 text-sm mt-2'>
               Komentar harus lebih dari 5 karakter
             </p>
