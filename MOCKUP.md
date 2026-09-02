@@ -1,27 +1,16 @@
-+-------------------------------------------------------------------+
-| [ Navbar / Header ] |
-| Halo, [ input nama ]
-+-------------------------------------------------------------------+
+Aku sudah membuat beberapa penyesuaian kecil. aku ingin kamu melakukan ini
 
-+-------------------------------------------------------------------+
-| KARTU ULASAN |
-| --------------------------------------------------------------- |
-| "Produknya sangat bagus dan membantu!" |
-| - Diulas oleh: [Nama yang diketik di navbar akan otomatis muncul] |
-+-------------------------------------------------------------------+
+kode dari komponen ini dipisah saja ke file sendiri
 
-+-------------------------------------------------------------------+
-| FORMULIR ULASAN PRODUK |
-| --------------------------------------------------------------- |
-| Nama Produk: |
-| [ Masukkan nama produk... ] |
-| |
-| Komentar / Ulasan: |
-| [ Tulis ulasan minimal 5 karakter di sini... ] |
-| |
-| > [Pesan Error Merah akan muncul di sini jika kurang dari 5 huruf]|
-| |
-| [ Tombol Kirim Ulasan ] |
-| > (Atau berubah jadi teks "Sedang Mengirim..." saat isLoading) |
-| > (Atau muncul teks hijau "Ulasan Berhasil Dikirim!" jika sukses)|
-+-------------------------------------------------------------------+
+- sidebar
+- navbar
+- summary card
+
+halaman profile usahakan jangan sampai ada scroll page,
+
+dan di edit profile ada error
+
+Unexpected Application Error!
+Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
+
+perbaiki
