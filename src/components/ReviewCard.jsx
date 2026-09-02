@@ -1,8 +1,9 @@
-import { ReviewContext } from '@/context/ReviewContext';
-import { useContext } from 'react';
+import { useProfile } from '@/stores/useProfile';
+import { useReview } from '@/stores/useReview';
 
 export function ReviewCard() {
-  const { reviewData, username } = useContext(ReviewContext);
+  const username = useProfile((state) => state.username);
+  const reviewData = useReview((state) => state.reviewData);
 
   return (
     <section className='border rounded-lg p-6 w-full max-w-150 transition-colors'>
