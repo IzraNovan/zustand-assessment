@@ -1,47 +1,38 @@
 import { Link } from 'react-router';
 import { useProfile } from '@/stores/useProfile';
+import { useStats } from '@/stores/useStats';
 import { Button } from '@/components/ui/button';
 import SummaryCard from '@/components/SummaryCard';
-import {
-  FolderKanban,
-  CheckCircle2,
-  Award,
-  Activity,
-  ArrowRight,
-} from 'lucide-react';
 
 export default function Dashboard() {
   const name = useProfile((state) => state.name);
   const bio = useProfile((state) => state.bio);
-  const totalProjects = useProfile((state) => state.totalProjects);
-  const completedTasks = useProfile((state) => state.completedTasks);
-  const activityPoints = useProfile((state) => state.activityPoints);
   const accountStatus = useProfile((state) => state.accountStatus);
+
+  const totalProjects = useStats((state) => state.totalProjects);
+  const completedTasks = useStats((state) => state.completedTasks);
+  const activityPoints = useStats((state) => state.activityPoints);
 
   const summaryCards = [
     {
       title: 'Total Proyek',
       value: totalProjects,
       description: 'Proyek yang sedang berjalan',
-      icon: FolderKanban,
     },
     {
       title: 'Tugas Selesai',
       value: completedTasks,
       description: 'Terselesaikan bulan ini',
-      icon: CheckCircle2,
     },
     {
       title: 'Poin Aktivitas',
       value: activityPoints?.toLocaleString() || 0,
       description: 'Total poin akumulasi',
-      icon: Award,
     },
     {
       title: 'Status Akun',
       value: accountStatus,
       description: 'Status ketersediaan Anda',
-      icon: Activity,
     },
   ];
 
@@ -52,22 +43,12 @@ export default function Dashboard() {
         <div className='flex flex-col md:flex-row md:items-center justify-between gap-4'>
           <div className='space-y-1.5'>
             <h1 className='text-2xl font-bold tracking-tight text-foreground'>
-              Selamat datang kembali, {name || 'Pengguna'}!
+              Selamat datang kembali,{' '}
+              <span className='text-teal-600'>{name || 'Pengguna'}</span>!
             </h1>
-            <p className='text-sm text-muted-foreground max-w-2xl leading-relaxed'>
+            <p className='text-sm text-teal-600 max-w-2xl leading-relaxed italic'>
               {bio || 'Belum ada bio singkat. Silakan atur pada menu profil.'}
             </p>
-          </div>
-
-          <div className='shrink-0'>
-            <Link to='/profile'>
-              <Button
-                variant='outline'
-                className='gap-2 text-xs font-semibold'>
-                Lihat Profil
-                <ArrowRight className='w-3.5 h-3.5' />
-              </Button>
-            </Link>
           </div>
         </div>
       </section>

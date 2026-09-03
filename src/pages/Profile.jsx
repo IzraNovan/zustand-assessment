@@ -1,172 +1,132 @@
 import { Link } from 'react-router';
 import { useProfile } from '@/stores/useProfile';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useStats } from '@/stores/useStats';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import {
-  Mail,
-  Briefcase,
-  Edit3,
-  CheckCircle2,
-  FolderKanban,
-  Award,
-} from 'lucide-react';
 
 export default function Profile() {
-  const name = useProfile((state) => state.name);
-  const role = useProfile((state) => state.role);
-  const email = useProfile((state) => state.email);
-  const bio = useProfile((state) => state.bio);
-  const avatar = useProfile((state) => state.avatar);
-  const totalProjects = useProfile((state) => state.totalProjects);
-  const completedTasks = useProfile((state) => state.completedTasks);
-  const activityPoints = useProfile((state) => state.activityPoints);
-  const accountStatus = useProfile((state) => state.accountStatus);
+  const {
+    name,
+    role,
+    email,
+    bio,
+    avatar,
+    accountStatus,
+  } = useProfile();
 
-  const getInitials = (text) => {
-    if (!text) return 'U';
-    return text
-      .split(' ')
-      .map((part) => part[0])
-      .slice(0, 2)
-      .join('')
-      .toUpperCase();
-  };
+  const {
+    totalProjects,
+    completedTasks,
+    activityPoints,
+  } = useStats();
 
-  const isStatusActive =
-    accountStatus === 'Aktif' || accountStatus === 'Active';
+  const isActive = ['Aktif', 'Active'].includes(accountStatus);
+
+  const stats = [
+    { label: 'Proyek', value: totalProjects },
+    { label: 'Tugas', value: completedTasks },
+    { label: 'Poin', value: activityPoints?.toLocaleString() },
+  ];
+
+  // Helper kelas Tailwind yang sering berulang agar tidak ditulis panjang
+  const boxClass = 'p-2.5 rounded-lg border border-border bg-card';
+  const labelClass =
+    'text-[10px] font-semibold text-muted-foreground uppercase tracking-wider';
 
   return (
     <div className='space-y-4 max-w-3xl mx-auto'>
-      {/* Page Header */}
+      {/* Header */}
       <div className='flex items-center justify-between'>
         <div>
-          <h1 className='text-lg font-bold tracking-tight'>Detail Profil</h1>
+          <h1 className='text-lg font-bold'>Detail Profil</h1>
           <p className='text-xs text-muted-foreground'>
             Informasi lengkap akun dan data personal Anda.
           </p>
         </div>
         <Link to='/profile/edit'>
-          <Button className='gap-1.5 text-xs font-semibold bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200'>
-            <Edit3 className='w-3.5 h-3.5' />
+          <Button
+            size='sm'
+            className='font-semibold'>
             Edit Profil
           </Button>
         </Link>
       </div>
 
-      {/* Main Profile Card View - Compact to prevent scroll */}
+      {/* Main Card */}
       <div className='border border-border rounded-xl bg-card overflow-hidden'>
-        {/* Banner area */}
-        <div className='h-20 bg-neutral-100 dark:bg-neutral-900 border-b border-border relative px-6 flex items-end'>
-          <div className='absolute -bottom-7 flex items-end gap-4'>
-            <Avatar className='size-16 rounded-xl border-4 border-card shadow-xs bg-muted'>
+        {/* Banner */}
+        <div className='h-20 bg-muted border-b border-border relative px-6 flex items-end'>
+          <div className='absolute -bottom-7'>
+            <Avatar className='size-16 rounded-xl border-4 border-card shadow-xs'>
               <AvatarImage
                 src={avatar}
                 alt={name}
                 className='rounded-xl'
               />
-              <AvatarFallback className='rounded-xl bg-black text-white dark:bg-white dark:text-black text-base font-bold'>
-                {getInitials(name)}
-              </AvatarFallback>
             </Avatar>
           </div>
         </div>
 
         <div className='pt-10 p-6 space-y-4'>
-          {/* Identity Header */}
-          <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-2'>
-            <div>
-              <div className='flex items-center gap-2'>
-                <h2 className='text-xl font-bold tracking-tight text-foreground'>
-                  {name || 'Nama Belum Diisi'}
-                </h2>
-                {/* Status Badge: Hijau jika Aktif, Merah jika Nonaktif */}
-                {isStatusActive ? (
-                  <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30'>
-                    Aktif
-                  </span>
-                ) : (
-                  <span className='inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-rose-500/10 text-rose-600 border border-rose-500/20 dark:bg-rose-500/20 dark:text-rose-400 dark:border-rose-500/30'>
-                    <span className='size-1.5 rounded-full bg-rose-500' />
-                    Nonaktif
-                  </span>
-                )}
-              </div>
-              <p className='text-xs text-muted-foreground font-medium flex items-center gap-1.5 mt-0.5'>
-                {role || 'Role Belum Diisi'}
-              </p>
+          {/* Identity */}
+          <div>
+            <div className='flex items-center gap-2'>
+              <h2 className='text-xl text-teal-600 font-bold'>
+                {name || 'Nama Belum Diisi'}
+              </h2>
+              <span
+                className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
+                  isActive
+                    ? 'bg-red-600/10 text-red-600 border-red-600/20'
+                    : 'bg-rose-500/10 text-rose-600 border-rose-500/20'
+                }`}>
+                {isActive ? 'Aktif' : 'Nonaktif'}
+              </span>
             </div>
+            <p className='text-xs text-teal-600 mt-0.5'>
+              {role || 'Role Belum Diisi'}
+            </p>
           </div>
 
-          {/* Bio Section */}
-          <div className='space-y-1 border-t border-border pt-3.5'>
-            <h3 className='text-[11px] font-bold uppercase tracking-wider text-muted-foreground'>
-              Tentang / Bio
-            </h3>
-            <p className='text-xs text-foreground/90 leading-relaxed bg-muted/40 p-3 rounded-lg border border-border'>
+          {/* Bio */}
+          <div className='border-t border-border pt-3.5 space-y-1'>
+            <p className={labelClass}>Tentang / Bio</p>
+            <p className='text-xs text-teal-600 bg-muted/40 p-3 rounded-lg border border-border'>
               {bio || 'Pengguna ini belum menambahkan bio deskripsi.'}
             </p>
           </div>
 
-          {/* Details & Email */}
+          {/* Details (Email & Role) */}
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-border pt-3.5'>
-            <div className='flex items-center gap-2.5 p-2.5 rounded-lg border border-border bg-card'>
-              <Mail className='w-4 h-4 text-muted-foreground' />
-              <div className='min-w-0'>
-                <p className='text-[10px] font-semibold text-muted-foreground uppercase tracking-wider'>
-                  Email
-                </p>
-                <p className='text-xs font-medium text-foreground truncate'>
-                  {email || '-'}
-                </p>
-              </div>
-            </div>
-
-            <div className='flex items-center gap-2.5 p-2.5 rounded-lg border border-border bg-card'>
-              <Briefcase className='w-4 h-4 text-muted-foreground' />
-              <div className='min-w-0'>
-                <p className='text-[10px] font-semibold text-muted-foreground uppercase tracking-wider'>
-                  Role / Profesi
-                </p>
-                <p className='text-xs font-medium text-foreground truncate'>
-                  {role || '-'}
+            {[
+              { label: 'Email', value: email },
+              { label: 'Role / Profesi', value: role },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className={boxClass}>
+                <p className={labelClass}>{item.label}</p>
+                <p className='text-xs text-teal-600 font-medium truncate mt-0.5'>
+                  {item.value || '-'}
                 </p>
               </div>
-            </div>
+            ))}
           </div>
 
-          {/* Quick Metrics */}
+          {/* Metrics */}
           <div className='border-t border-border pt-3.5'>
-            <h3 className='text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-2'>
-              Statistik Akun
-            </h3>
+            <p className={`${labelClass} mb-2`}>Statistik Akun</p>
             <div className='grid grid-cols-3 gap-3 text-center'>
-              <div className='p-2.5 border border-border rounded-lg bg-card'>
-                <div className='flex items-center justify-center gap-1 text-muted-foreground text-[11px]'>
-                  <FolderKanban className='w-3 h-3' />
-                  <span>Proyek</span>
+              {stats.map((stat, idx) => (
+                <div
+                  key={idx}
+                  className={boxClass}>
+                  <p className={labelClass}>{stat.label}</p>
+                  <p className='text-base text-red-600 font-bold mt-0.5'>
+                    {stat.value}
+                  </p>
                 </div>
-                <p className='text-base font-bold text-foreground mt-0.5'>
-                  {totalProjects}
-                </p>
-              </div>
-              <div className='p-2.5 border border-border rounded-lg bg-card'>
-                <div className='flex items-center justify-center gap-1 text-muted-foreground text-[11px]'>
-                  <CheckCircle2 className='w-3 h-3' />
-                  <span>Tugas</span>
-                </div>
-                <p className='text-base font-bold text-foreground mt-0.5'>
-                  {completedTasks}
-                </p>
-              </div>
-              <div className='p-2.5 border border-border rounded-lg bg-card'>
-                <div className='flex items-center justify-center gap-1 text-muted-foreground text-[11px]'>
-                  <Award className='w-3 h-3' />
-                  <span>Poin</span>
-                </div>
-                <p className='text-base font-bold text-foreground mt-0.5'>
-                  {activityPoints?.toLocaleString()}
-                </p>
-              </div>
+              ))}
             </div>
           </div>
         </div>

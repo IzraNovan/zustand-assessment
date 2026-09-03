@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { useProfile } from '@/stores/useProfile';
+import { useStats } from '@/stores/useStats';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Save, FolderKanban, CheckCircle2, Award, Sparkles } from 'lucide-react';
 
 export default function EditStats() {
-  const totalProjects = useProfile((state) => state.totalProjects);
-  const completedTasks = useProfile((state) => state.completedTasks);
-  const activityPoints = useProfile((state) => state.activityPoints);
   const accountStatus = useProfile((state) => state.accountStatus);
   const updateProfile = useProfile((state) => state.updateProfile);
+
+  const totalProjects = useStats((state) => state.totalProjects);
+  const completedTasks = useStats((state) => state.completedTasks);
+  const activityPoints = useStats((state) => state.activityPoints);
+  const updateStats = useStats((state) => state.updateStats);
 
   // Normalize initial status to either Aktif or Nonaktif
   const initialStatus =
@@ -37,10 +39,13 @@ export default function EditStats() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    updateProfile({
+    updateStats({
       totalProjects: Number(formData.totalProjects),
       completedTasks: Number(formData.completedTasks),
       activityPoints: Number(formData.activityPoints),
+    });
+
+    updateProfile({
       accountStatus: formData.accountStatus,
     });
 
@@ -64,7 +69,6 @@ export default function EditStats() {
 
       {isSaved && (
         <div className='p-3.5 rounded-lg border border-border bg-muted flex items-center gap-2 text-xs font-semibold'>
-          <Sparkles className='w-4 h-4 text-foreground' />
           <span>
             Statistik berhasil disimpan dan diperbarui di seluruh aplikasi!
           </span>
@@ -82,7 +86,6 @@ export default function EditStats() {
             <Label
               htmlFor='totalProjects'
               className='text-xs font-semibold flex items-center gap-1.5'>
-              <FolderKanban className='w-3.5 h-3.5 text-muted-foreground' />
               Total Proyek
             </Label>
             <Input
@@ -101,7 +104,6 @@ export default function EditStats() {
             <Label
               htmlFor='completedTasks'
               className='text-xs font-semibold flex items-center gap-1.5'>
-              <CheckCircle2 className='w-3.5 h-3.5 text-muted-foreground' />
               Tugas Selesai
             </Label>
             <Input
@@ -120,7 +122,6 @@ export default function EditStats() {
             <Label
               htmlFor='activityPoints'
               className='text-xs font-semibold flex items-center gap-1.5'>
-              <Award className='w-3.5 h-3.5 text-muted-foreground' />
               Poin Aktivitas
             </Label>
             <Input
@@ -137,9 +138,7 @@ export default function EditStats() {
 
         {/* Status Keaktifan (Radio Button Sederhana Default) */}
         <div className='space-y-2.5 border-t border-border pt-4'>
-          <Label className='text-xs font-semibold'>
-            Status Keaktifan Akun
-          </Label>
+          <Label className='text-xs font-semibold'>Status Keaktifan Akun</Label>
 
           <div className='flex items-center gap-6 pt-1'>
             <label className='flex items-center gap-2 text-sm cursor-pointer select-none'>
@@ -173,8 +172,7 @@ export default function EditStats() {
           <Button
             type='submit'
             className='gap-2 text-xs font-semibold bg-black text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200'>
-            <Save className='w-3.5 h-3.5' />
-            Simpan Perubahan Statistik
+            Simpan Perubahan
           </Button>
         </div>
       </form>

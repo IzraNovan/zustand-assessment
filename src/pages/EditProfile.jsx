@@ -133,6 +133,23 @@ export default function EditProfile() {
               className='bg-background resize-none text-sm'
             />
           </div>
+
+          <div className='space-y-1.5'>
+            <Label
+              htmlFor='avatar'
+              className='text-xs font-semibold'>
+              URL Avatar
+            </Label>
+            <Input
+              id='avatar'
+              type='url'
+              required
+              placeholder='Masukkan URL gambar avatar...'
+              value={formData.avatar}
+              onChange={(e) => handleChange('avatar', e.target.value)}
+              className='bg-background text-sm'
+            />
+          </div>
         </div>
 
         {/* Action Buttons */}

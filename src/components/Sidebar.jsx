@@ -59,7 +59,7 @@ export default function Sidebar() {
           <span>Statistik</span>
         </NavLink>
 
-        <footer className='text-xs absolute bottom-5 text-slate-400'>
+        <footer className='text-xs absolute bottom-5 text-teal-600'>
           {email}
         </footer>
       </nav>
