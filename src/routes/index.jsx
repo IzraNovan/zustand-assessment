@@ -4,6 +4,7 @@ import Dashboard from '@/pages/Dashboard';
 import Profile from '@/pages/Profile';
 import EditProfile from '@/pages/EditProfile';
 import EditStats from '@/pages/EditStats';
+import LoginForm from '@/pages/LoginForm';
 
 export const myRouter = createBrowserRouter([
   {
@@ -27,5 +28,9 @@ export const myRouter = createBrowserRouter([
         element: <EditStats />,
       },
     ],
+  },
+  {
+    path: '/login',
+    element: <LoginForm />,
   },
 ]);
